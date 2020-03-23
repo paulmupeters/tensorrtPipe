@@ -3,24 +3,23 @@ project(pipetrt VERSION 0.1.0)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-set(PLUGIN_SOURCES
-    src/pipeTrt.cpp)
 
 #
 # CUDA Configuration
 #
 find_package(CUDA REQUIRED)
-
 set(CUDA_VERBOSE_BUILD ON)
 
 # Specify the cuda host compiler to use the same compiler as cmake.
 set(CUDA_HOST_COMPILER ${CMAKE_CXX_COMPILER})
+set(PLUGIN_SOURCES src/PipeTrt.cpp)
+
+
 
 #add TensorRT
 find_path(TENSORRT_INCLUDE_DIR NvInfer.h
-  HINTS ${TENSORRT_ROOT} ${CUDA_TOOLKIT_ROOT_DIR}
+  HINTS ${TENSORRT_ROOT} ${CUDA_TOOLKIT_ROOT_DIR} 
   PATH_SUFFIXES include)
 MESSAGE(STATUS "Found TensorRT headers at ${TENSORRT_INCLUDE_DIR}")
 find_library(TENSORRT_LIBRARY_INFER nvinfer
@@ -47,7 +46,14 @@ list(APPEND CUDA_NVCC_FLAGS "-D_FORCE_INLINES -Xcompiler -fPIC")
 CUDA_INCLUDE_DIRECTORIES(${CUDNN_INCLUDE_DIR} ${TENSORRT_INCLUDE_DIR})
 CUDA_ADD_LIBRARY(pipeTrt STATIC ${PLUGIN_SOURCES})
 
-target_include_directories(pipeTrt PUBLIC ${CUDA_INCLUDE_DIRS} ${TENSORRT_INCLUDE_DIR} ${CUDNN_INCLUDE_DIR})
+
+#include_directories(
+#  ${CMAKE_CURRENT_SOURCE_DIR}/include
+#  ${CUDA_INCLUDE_DIRS}
+#  ${TENSORRT_INCLUDE_DIR})
+
+target_include_directories(pipeTrt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS} ${TENSORRT_INCLUDE_DIR} ${CUDNN_INCLUDE_DIR})
+
 target_link_libraries(pipeTrt ${TENSORRT_LIBRARY})
 
 

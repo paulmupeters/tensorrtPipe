@@ -3,6 +3,12 @@
 
 int main(int argc, char** argv)
 {
+
+    std::cout<<"creating  trtpipe object"<<endl;
+    pipn:: multiStreamTrt();
+    
+
+    /*
     samplesCommon::Args args;
     string number = "5";
     if (argc > 1)
@@ -34,6 +40,7 @@ int main(int argc, char** argv)
         return gLogger.reportFail(sampleTest);
     }
     return gLogger.reportPass(sampleTest);
+    */
     
 }
 

@@ -3,17 +3,18 @@
 #include <string>
 #include "Utils.h"
 
-namespace pipes{    
+namespace pipn{    
 
     class multiStreamTrt{
         //TO-DO: Replace pointers with smart pointers ********
         template <typename T>
         using SampleUniquePtr = std::unique_ptr<T, samplesCommon::InferDeleter>; 
         public:
-            multiStreamTrt(const string args);
+            //multiStreamTrt(const string args);
+            multiStreamTrt();
             bool build();
             bool infer(string number);
-
+            bool saveEngines();
 
             //To-DO *****************
             bool getSerializedEngines(vector<string> enginePath);

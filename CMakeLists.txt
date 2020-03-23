@@ -2,15 +2,15 @@ cmake_minimum_required(VERSION 3.0.0)
 project(pipetrt VERSION 0.1.0)
 
 set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 
-# add lib pipeTrt
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/pipeTrt sample.out)
-include_directories({$CMAKE_CURRENT_SOURCE_DIR}/pipeTrt)
+set(TENSORRT_ROOT /usr/src/tensorrt/)
+set(CUDA_TOOLKIT_ROOT_DIR /usr/local/cuda/)
+set(CUDA_CUDART_LIBRARY /usr/local/cuda/lib64/libcudart.so)
 
-
-
-add_executable(sample_mnist pipeMNISTTest.cpp)
-target_link_libraries(sample_mnist pipeTrt)
-
-install(TARGETS sample_mnist DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/install/)
+# add subdirectories
+add_subdirectory(pipeTrt)
+add_subdirectory(example)

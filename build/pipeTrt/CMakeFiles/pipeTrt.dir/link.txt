@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libpipeTrt.a  CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o
+/usr/bin/ranlib ../../lib/libpipeTrt.a

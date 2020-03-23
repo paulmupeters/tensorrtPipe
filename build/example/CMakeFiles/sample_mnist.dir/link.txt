@@ -1,0 +1,1 @@
+/usr/bin/g++-7     CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o  -o ../../bin/sample_mnist -Wl,-rpath,/usr/local/cuda/lib64 ../../lib/libpipeTrt.a /usr/local/cuda/lib64/libcudart.so 

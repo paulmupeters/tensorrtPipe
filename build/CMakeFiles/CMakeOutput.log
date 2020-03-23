@@ -1,0 +1,87 @@
+The system is: Linux - sh: 0: getcwd() failed: No such file or directory
+4.9.140-tegra - sh: 0: getcwd() failed: No such file or directory
+aarch64
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_27c95/fast"
+/usr/bin/make -f CMakeFiles/cmTC_27c95.dir/build.make CMakeFiles/cmTC_27c95.dir/build
+make[1]: Entering directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_27c95.dir/testCCompiler.c.o
+/usr/bin/gcc-7    -o CMakeFiles/cmTC_27c95.dir/testCCompiler.c.o   -c /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_27c95
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_27c95.dir/link.txt --verbose=1
+/usr/bin/gcc-7      CMakeFiles/cmTC_27c95.dir/testCCompiler.c.o  -o cmTC_27c95 
+make[1]: Leaving directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5d6d9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5d6d9.dir/build.make CMakeFiles/cmTC_5d6d9.dir/build
+make[1]: Entering directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5d6d9.dir/CMakeCCompilerABI.c.o
+/usr/bin/gcc-7    -o CMakeFiles/cmTC_5d6d9.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_5d6d9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5d6d9.dir/link.txt --verbose=1
+/usr/bin/gcc-7      CMakeFiles/cmTC_5d6d9.dir/CMakeCCompilerABI.c.o  -o cmTC_5d6d9 
+make[1]: Leaving directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_01ec0/fast"
+/usr/bin/make -f CMakeFiles/cmTC_01ec0.dir/build.make CMakeFiles/cmTC_01ec0.dir/build
+make[1]: Entering directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_01ec0.dir/testCXXCompiler.cxx.o
+/usr/bin/g++-7     -o CMakeFiles/cmTC_01ec0.dir/testCXXCompiler.cxx.o -c /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_01ec0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_01ec0.dir/link.txt --verbose=1
+/usr/bin/g++-7       CMakeFiles/cmTC_01ec0.dir/testCXXCompiler.cxx.o  -o cmTC_01ec0 
+make[1]: Leaving directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c7cce/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c7cce.dir/build.make CMakeFiles/cmTC_c7cce.dir/build
+make[1]: Entering directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_c7cce.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/g++-7     -o CMakeFiles/cmTC_c7cce.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_c7cce
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c7cce.dir/link.txt --verbose=1
+/usr/bin/g++-7       CMakeFiles/cmTC_c7cce.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_c7cce 
+make[1]: Leaving directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_2d8d7/fast"
+/usr/bin/make -f CMakeFiles/cmTC_2d8d7.dir/build.make CMakeFiles/cmTC_2d8d7.dir/build
+make[1]: Entering directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2d8d7.dir/CheckIncludeFile.c.o
+/usr/bin/gcc-7   -fPIC    -o CMakeFiles/cmTC_2d8d7.dir/CheckIncludeFile.c.o   -c /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_2d8d7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2d8d7.dir/link.txt --verbose=1
+/usr/bin/gcc-7 -fPIC     CMakeFiles/cmTC_2d8d7.dir/CheckIncludeFile.c.o  -o cmTC_2d8d7 
+make[1]: Leaving directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c167b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c167b.dir/build.make CMakeFiles/cmTC_c167b.dir/build
+make[1]: Entering directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c167b.dir/CheckFunctionExists.c.o
+/usr/bin/gcc-7   -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_c167b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_c167b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c167b.dir/link.txt --verbose=1
+/usr/bin/gcc-7 -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_c167b.dir/CheckFunctionExists.c.o  -o cmTC_c167b -lpthread 
+make[1]: Leaving directory '/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/CMakeTmp'
+
+

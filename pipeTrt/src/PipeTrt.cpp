@@ -46,10 +46,10 @@ struct InferDeleter
     }
 };
 
-namespace pipes{
-    multiStreamTrt::multiStreamTrt(const string args){
+namespace pipn{
+    multiStreamTrt::multiStreamTrt(){
         cout<<"building"<< args <<"engines"<<endl;
-        assert(build);
+        //assert(build());
     }
 
     bool multiStreamTrt::build(){
