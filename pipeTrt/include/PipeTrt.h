@@ -1,27 +1,27 @@
 #ifndef HPIPE_INCLUDED
 #define HPIPE_INCLUDED
 #include <string>
+#include"NvInfer.h"
+#include <vector>
 #include "Utils.h"
 
 namespace pipn{    
 
     class multiStreamTrt{
         //TO-DO: Replace pointers with smart pointers ********
-        template <typename T>
-        using SampleUniquePtr = std::unique_ptr<T, samplesCommon::InferDeleter>; 
         public:
             //multiStreamTrt(const string args);
             multiStreamTrt();
             bool build();
-            bool infer(string number);
+            bool infer(std::string number);
             bool saveEngines();
 
             //To-DO *****************
-            bool getSerializedEngines(vector<string> enginePath);
+            bool getSerializedEngines(std::vector<std::string> enginePath);
             bool teardown();
 
         private:
-            bool launchInference(vector<float> const & inputTensor, vector<float>& outputTensor, nvinfer1::ICudaEngine* engine, void*inputBinding, void* outputBinding);
+            bool launchInference(std::vector<float> const & inputTensor, std::vector<float>& outputTensor, nvinfer1::ICudaEngine* engine, void*inputBinding, void* outputBinding);
             int batchSize = 1; 
             int nNetworks = 2;
             std::vector<nvinfer1::ICudaEngine*> mEngines;

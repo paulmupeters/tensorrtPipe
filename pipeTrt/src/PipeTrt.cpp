@@ -6,10 +6,10 @@
 //! It can be run with the following command line:
 //! Command: ./sample_mnist [-h or --help] [-d=/path/to/data/dir or --datadir=/path/to/data/dir]
 #include "PipeTrt.h"
-#include "logger.h"
-#include "common.h"
-#include "argsParser.h"
-#include "buffers.h"
+//#include "logger.h"
+//#include "common.h"
+//#include "argsParser.h"
+//#include "buffers.h"
 #include <vector>
 #include <queue>
 #include <memory>
@@ -27,7 +27,7 @@
 #include <thread>
 
 
-
+using namespace std;
 template <typename T, typename A>
 int arg_max(std::vector<T, A> const& vec) {
 return static_cast<int>(std::distance(vec.begin(), max_element(vec.begin(), vec.end())));
@@ -48,10 +48,11 @@ struct InferDeleter
 
 namespace pipn{
     multiStreamTrt::multiStreamTrt(){
-        cout<<"building"<< args <<"engines"<<endl;
+        std::cout<<"building"<< " dd" <<"engines"<<std::endl;
         //assert(build());
     }
-
+}
+/*
     bool multiStreamTrt::build(){
         
         nvinfer1::IBuilder* builder = createInferBuilder(gLogger.getTRTLogger());
@@ -64,7 +65,7 @@ namespace pipn{
         //change to dataDir variable -------------------------------------------->>><<<<
         parser->parse("../data/mnist.prototxt" ,"../../data/mnist.caffemodel", *network, nvinfer1::DataType::kFLOAT);
         assert(network->getNbLayers() > 0  && "Network was not parsed correctly");
-        cout<<"parsed succes"<<endl;
+        std::cout<<"parsed succes"<<endl;
 
 
         //network->markOutput(*blobNameToTensor->find("prob"));
@@ -340,5 +341,6 @@ namespace pipn{
     bool multiStreamTrt::getSerializedEngines(){
         return true;
     }
-    */
+
 }
+*/

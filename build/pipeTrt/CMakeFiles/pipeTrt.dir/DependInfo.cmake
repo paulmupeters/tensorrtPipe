@@ -6,10 +6,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/src/PipeTrt.cpp" "/home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o"
   )
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/local/cuda-10.0/include"
+  "/usr/local/cuda/include"
   "../pipeTrt/include"
   "/usr/include/aarch64-linux-gnu"
   )

@@ -60,15 +60,15 @@ include pipeTrt/CMakeFiles/pipeTrt.dir/flags.make
 pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: pipeTrt/CMakeFiles/pipeTrt.dir/flags.make
 pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: ../pipeTrt/src/PipeTrt.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o"
-	cd /home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt && /usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o -c /home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/src/PipeTrt.cpp
+	cd /home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt && /usr/bin/aarch64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o -c /home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/src/PipeTrt.cpp
 
 pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.i"
-	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_PREPROCESSED_SOURCE
+	cd /home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt && /usr/bin/aarch64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/src/PipeTrt.cpp > CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.i
 
 pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.s"
-	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_ASSEMBLY_SOURCE
+	cd /home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt && /usr/bin/aarch64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/src/PipeTrt.cpp -o CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.s
 
 pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o.requires:
 

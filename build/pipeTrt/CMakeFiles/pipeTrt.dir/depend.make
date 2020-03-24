@@ -6,13 +6,13 @@ pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: ../pipeTrt/include/Utils.h
 pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: ../pipeTrt/src/PipeTrt.cpp
 pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/include/aarch64-linux-gnu/NvCaffeParser.h
 pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/include/aarch64-linux-gnu/NvInfer.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/builtin_types.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/crt/host_defines.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/cuda_device_runtime_api.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/cuda_runtime_api.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/device_types.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/driver_types.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/surface_types.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/texture_types.h
-pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda-10.0/include/vector_types.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/builtin_types.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/crt/host_defines.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/cuda_device_runtime_api.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/cuda_runtime_api.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/device_types.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/driver_types.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/surface_types.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/texture_types.h
+pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o: /usr/local/cuda/include/vector_types.h
 

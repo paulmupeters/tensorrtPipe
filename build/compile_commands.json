@@ -1,12 +1,12 @@
 [
 {
   "directory": "/home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt",
-  "command": "/usr/bin/g++-7   -I/usr/local/cuda-10.0/include -I/home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/include -I/usr/include/aarch64-linux-gnu   -std=c++11 -Wall -Ofast -Wfatal-errors -D_MWAITXINTRIN_H_INCLUDED   -o CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o -c /home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/src/PipeTrt.cpp",
+  "command": "/usr/bin/aarch64-linux-gnu-g++-7   -I/usr/local/cuda/include -I/home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/include -I/usr/include/aarch64-linux-gnu   -std=c++11 -Wall -Ofast -Wfatal-errors -D_MWAITXINTRIN_H_INCLUDED -g   -o CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o -c /home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/src/PipeTrt.cpp",
   "file": "/home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/src/PipeTrt.cpp"
 },
 {
   "directory": "/home/nvidia/PaulPeters/tensorrtPipe/build/example",
-  "command": "/usr/bin/g++-7   -I/home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/include -I/usr/local/cuda-10.0/include -I/usr/include/aarch64-linux-gnu    -o CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o -c /home/nvidia/PaulPeters/tensorrtPipe/example/pipeMNISTTest.cpp",
+  "command": "/usr/bin/aarch64-linux-gnu-g++-7   -I/home/nvidia/PaulPeters/tensorrtPipe/pipeTrt/include -I/usr/local/cuda/include -I/usr/include/aarch64-linux-gnu  -g   -o CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o -c /home/nvidia/PaulPeters/tensorrtPipe/example/pipeMNISTTest.cpp",
   "file": "/home/nvidia/PaulPeters/tensorrtPipe/example/pipeMNISTTest.cpp"
 }
 ]

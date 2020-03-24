@@ -60,15 +60,15 @@ include example/CMakeFiles/sample_mnist.dir/flags.make
 example/CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o: example/CMakeFiles/sample_mnist.dir/flags.make
 example/CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o: ../example/pipeMNISTTest.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object example/CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o"
-	cd /home/nvidia/PaulPeters/tensorrtPipe/build/example && /usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o -c /home/nvidia/PaulPeters/tensorrtPipe/example/pipeMNISTTest.cpp
+	cd /home/nvidia/PaulPeters/tensorrtPipe/build/example && /usr/bin/aarch64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o -c /home/nvidia/PaulPeters/tensorrtPipe/example/pipeMNISTTest.cpp
 
 example/CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.i"
-	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_PREPROCESSED_SOURCE
+	cd /home/nvidia/PaulPeters/tensorrtPipe/build/example && /usr/bin/aarch64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nvidia/PaulPeters/tensorrtPipe/example/pipeMNISTTest.cpp > CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.i
 
 example/CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.s"
-	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CXX_CREATE_ASSEMBLY_SOURCE
+	cd /home/nvidia/PaulPeters/tensorrtPipe/build/example && /usr/bin/aarch64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nvidia/PaulPeters/tensorrtPipe/example/pipeMNISTTest.cpp -o CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.s
 
 example/CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o.requires:
 
@@ -91,7 +91,11 @@ sample_mnist_EXTERNAL_OBJECTS =
 ../bin/sample_mnist: example/CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.o
 ../bin/sample_mnist: example/CMakeFiles/sample_mnist.dir/build.make
 ../bin/sample_mnist: ../lib/libpipeTrt.a
-../bin/sample_mnist: /usr/local/cuda/lib64/libcudart.so
+../bin/sample_mnist: /usr/local/cuda/lib64/libcudart_static.a
+../bin/sample_mnist: /usr/lib/aarch64-linux-gnu/librt.so
+../bin/sample_mnist: /usr/lib/aarch64-linux-gnu/libnvinfer.so
+../bin/sample_mnist: /usr/lib/aarch64-linux-gnu/libnvinfer_plugin.so
+../bin/sample_mnist: /usr/lib/aarch64-linux-gnu/libnvparsers.so
 ../bin/sample_mnist: example/CMakeFiles/sample_mnist.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../../bin/sample_mnist"
 	cd /home/nvidia/PaulPeters/tensorrtPipe/build/example && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/sample_mnist.dir/link.txt --verbose=$(VERBOSE)
