@@ -6,7 +6,7 @@ NVIDIA Jetson Tx2
 ubuntu 18.04
 CUDA 10.0
 TensorRT 6.0.1.
-<pre>
+<\pre>
 
 
 ## Should be used as followed:
