@@ -1,8 +1,0 @@
-/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/rebuild_cache.dir
-/home/nvidia/PaulPeters/tensorrtPipe/build/CMakeFiles/edit_cache.dir
-/home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt/CMakeFiles/rebuild_cache.dir
-/home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt/CMakeFiles/pipeTrt.dir
-/home/nvidia/PaulPeters/tensorrtPipe/build/pipeTrt/CMakeFiles/edit_cache.dir
-/home/nvidia/PaulPeters/tensorrtPipe/build/example/CMakeFiles/rebuild_cache.dir
-/home/nvidia/PaulPeters/tensorrtPipe/build/example/CMakeFiles/sample_mnist.dir
-/home/nvidia/PaulPeters/tensorrtPipe/build/example/CMakeFiles/edit_cache.dir
