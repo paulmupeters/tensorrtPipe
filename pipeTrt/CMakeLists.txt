@@ -13,7 +13,10 @@ set(CUDA_VERBOSE_BUILD ON)
 
 # Specify the cuda host compiler to use the same compiler as cmake.
 set(CUDA_HOST_COMPILER ${CMAKE_CXX_COMPILER})
-set(PLUGIN_SOURCES src/PipeTrt.cpp)
+set(PLUGIN_SOURCES 
+    src/multiStream.cpp
+    src/pipe.cpp
+)
 
 
 
@@ -56,4 +59,10 @@ target_include_directories(pipeTrt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${
 
 target_link_libraries(pipeTrt ${TENSORRT_LIBRARY})
 
-
+find_package(Threads REQUIRED)
+if(THREADS_HAVE_PTHREAD_ARG)
+  target_compile_options(pipeTrt PUBLIC "-pthread")
+endif()
+if(CMAKE_THREAD_LIBS_INIT)
+  target_link_libraries(pipeTrt "${CMAKE_THREAD_LIBS_INIT}")
+endif()

@@ -8,6 +8,8 @@
 #include <numeric>
 #include "NvInfer.h"
 #include <cassert>
+#include <vector>
+#include <queue>
 
 
 #define CHECK(status)                                                                                                  \
@@ -27,7 +29,7 @@
 class Logger : public nvinfer1::ILogger
 {
     public:
-        Logger(bool verbose):mVerbose{verbose}{
+        Logger(bool verbose):mVerbose(verbose){
         }
 
         virtual void log(Severity severity, const char* msg) override
@@ -39,6 +41,28 @@ class Logger : public nvinfer1::ILogger
     private:
         bool mVerbose;
 };
+
+
+
+// que with max amount
+template<typename T>
+class MaxQueue : public std::queue<T>
+{
+    int _maxSize;
+public:
+    void setMaxSize(int maxSize) {_maxSize = maxSize;}
+    void push(const T& element)
+    {
+        if (std::queue<T>::size() < _maxSize)
+           std::queue<T>::push(element);
+        else
+        {
+            std::queue<T>::pop();
+            std::queue<T>::push(element);
+        }
+    }
+};
+
 
 // Locate path to file, given its filename or filepath suffix and possible dirs it might lie in
 // Function will also walk back MAX_DEPTH dirs from CWD to check for such a file path
@@ -89,14 +113,16 @@ if (filepath.empty())
 return filepath;
 }
 
-inline void readPGMFile(const std::string& fileName, uint8_t* buffer, int inH, int inW)
+inline void readPGMFile(const std::string& fileName, std::vector<float>& inputVec, int inH, int inW)
 {
+    uint8_t buffer[inH* inW];
     std::ifstream infile(fileName, std::ifstream::binary);
     assert(infile.is_open() && "Attempting to read from a file that is not open.");
     std::string magic, h, w, max;
     infile >> magic >> h >> w >> max;
     infile.seekg(1, infile.cur);
-    infile.read(reinterpret_cast<char*>(buffer), inH * inW);
+    infile.read(reinterpret_cast<char*>(&buffer[0]), inH * inW);
+    inputVec = std::vector<float>(&buffer[0], &buffer[inH*inW]);
 }
 
 #endif

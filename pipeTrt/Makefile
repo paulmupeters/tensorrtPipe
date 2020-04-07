@@ -125,32 +125,59 @@ pipeTrt/fast:
 	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/build
 .PHONY : pipeTrt/fast
 
-src/PipeTrt.o: src/PipeTrt.cpp.o
+src/multiStream.o: src/multiStream.cpp.o
 
-.PHONY : src/PipeTrt.o
+.PHONY : src/multiStream.o
 
 # target to build an object file
-src/PipeTrt.cpp.o:
-	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.o
-.PHONY : src/PipeTrt.cpp.o
+src/multiStream.cpp.o:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/multiStream.cpp.o
+.PHONY : src/multiStream.cpp.o
 
-src/PipeTrt.i: src/PipeTrt.cpp.i
+src/multiStream.i: src/multiStream.cpp.i
 
-.PHONY : src/PipeTrt.i
+.PHONY : src/multiStream.i
 
 # target to preprocess a source file
-src/PipeTrt.cpp.i:
-	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.i
-.PHONY : src/PipeTrt.cpp.i
+src/multiStream.cpp.i:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/multiStream.cpp.i
+.PHONY : src/multiStream.cpp.i
 
-src/PipeTrt.s: src/PipeTrt.cpp.s
+src/multiStream.s: src/multiStream.cpp.s
 
-.PHONY : src/PipeTrt.s
+.PHONY : src/multiStream.s
 
 # target to generate assembly for a file
-src/PipeTrt.cpp.s:
-	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/PipeTrt.cpp.s
-.PHONY : src/PipeTrt.cpp.s
+src/multiStream.cpp.s:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/multiStream.cpp.s
+.PHONY : src/multiStream.cpp.s
+
+src/pipe.o: src/pipe.cpp.o
+
+.PHONY : src/pipe.o
+
+# target to build an object file
+src/pipe.cpp.o:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/pipe.cpp.o
+.PHONY : src/pipe.cpp.o
+
+src/pipe.i: src/pipe.cpp.i
+
+.PHONY : src/pipe.i
+
+# target to preprocess a source file
+src/pipe.cpp.i:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/pipe.cpp.i
+.PHONY : src/pipe.cpp.i
+
+src/pipe.s: src/pipe.cpp.s
+
+.PHONY : src/pipe.s
+
+# target to generate assembly for a file
+src/pipe.cpp.s:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/pipe.cpp.s
+.PHONY : src/pipe.cpp.s
 
 # Help Target
 help:
@@ -161,9 +188,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... pipeTrt"
 	@echo "... edit_cache"
-	@echo "... src/PipeTrt.o"
-	@echo "... src/PipeTrt.i"
-	@echo "... src/PipeTrt.s"
+	@echo "... src/multiStream.o"
+	@echo "... src/multiStream.i"
+	@echo "... src/multiStream.s"
+	@echo "... src/pipe.o"
+	@echo "... src/pipe.i"
+	@echo "... src/pipe.s"
 .PHONY : help
 
 

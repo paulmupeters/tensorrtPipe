@@ -152,6 +152,33 @@ pipeMNISTTest.cpp.s:
 	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f example/CMakeFiles/sample_mnist.dir/build.make example/CMakeFiles/sample_mnist.dir/pipeMNISTTest.cpp.s
 .PHONY : pipeMNISTTest.cpp.s
 
+prepData.o: prepData.cpp.o
+
+.PHONY : prepData.o
+
+# target to build an object file
+prepData.cpp.o:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f example/CMakeFiles/sample_mnist.dir/build.make example/CMakeFiles/sample_mnist.dir/prepData.cpp.o
+.PHONY : prepData.cpp.o
+
+prepData.i: prepData.cpp.i
+
+.PHONY : prepData.i
+
+# target to preprocess a source file
+prepData.cpp.i:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f example/CMakeFiles/sample_mnist.dir/build.make example/CMakeFiles/sample_mnist.dir/prepData.cpp.i
+.PHONY : prepData.cpp.i
+
+prepData.s: prepData.cpp.s
+
+.PHONY : prepData.s
+
+# target to generate assembly for a file
+prepData.cpp.s:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f example/CMakeFiles/sample_mnist.dir/build.make example/CMakeFiles/sample_mnist.dir/prepData.cpp.s
+.PHONY : prepData.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -164,6 +191,9 @@ help:
 	@echo "... pipeMNISTTest.o"
 	@echo "... pipeMNISTTest.i"
 	@echo "... pipeMNISTTest.s"
+	@echo "... prepData.o"
+	@echo "... prepData.i"
+	@echo "... prepData.s"
 .PHONY : help
 
 
