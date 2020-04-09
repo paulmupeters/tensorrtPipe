@@ -16,6 +16,10 @@ struct Output{
     bool accesed = true;
 };
 
+template <typename T, typename A>
+int arg_max(std::vector<T, A> const& vec) {
+return static_cast<int>(std::distance(vec.begin(), max_element(vec.begin(), vec.end())));
+}
 
 class Pipe{
     public:
@@ -33,7 +37,7 @@ class Pipe{
         void infer(std::vector<float> const input);        
         bool getOutput(std::vector<float>&);
         void setNextPipe(std::shared_ptr<Pipe>);
-        void terminate();
+        bool terminate();
 
     private:
         bool isLast;

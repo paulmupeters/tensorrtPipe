@@ -9,16 +9,17 @@ Pipe::~Pipe(){
     CHECK(cudaFree(mBindings[0]));
     CHECK(cudaFree(mBindings[1]));
     mThread.join();
+    std::cout<<"Thread joined, exiting pipe #"<<std::endl;
 }
 
 void Pipe::launchInference(){
     cudaEvent_t start;
     cudaEvent_t end;
     
-    while(!mTerminate){
+    while(!mTerminate || !inputQueue.empty()){
         if(!inputQueue.empty()){
             std::vector<float> const inputTensor = inputQueue.front();
-            std::vector<float> outputTensor;
+            std::vector<float> outputTensor(output_size);
             inputQueue.pop();
             float elapsedTime;
             cudaEventRecord(start, mStream);
@@ -38,12 +39,15 @@ void Pipe::launchInference(){
             if(isLast){
                 Output newOutput(outputTensor);
                 netOutputs.push_back(newOutput);
+                int max_element = arg_max(outputTensor);
+                std::cout << "classified as: "<< max_element<<std::endl;
             }
             else{
                 nextPipe->infer(outputTensor);
             }
         }
     }
+    threadRunning = false;
 }
 
 void Pipe::infer(std::vector<float> const inputTensor){
@@ -70,11 +74,19 @@ bool Pipe::getOutput(std::vector<float>& outputTensor){
     return true;
 }
 
-void Pipe::terminate(){
+bool Pipe::terminate(){
     mTerminate = true;
+    while(threadRunning)
+    {
+        //wait
+    }
     if(nextPipe)
-        nextPipe->terminate();
+        return nextPipe->terminate();
+    
+    return true;
 }
+
+    
 
 void Pipe::allocateGpu(nvinfer1::ICudaEngine* engine){
         for (int i = 0; i < engine->getNbBindings(); ++i){

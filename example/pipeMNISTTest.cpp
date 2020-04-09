@@ -54,15 +54,15 @@ int main(int argc, char** argv)
     readPGMFile(locateFile(number + ".pgm", dirs), inputVec, INPUT_H, INPUT_W);
 
 
-    for (int i = 0; i<1; i++){
+    for (int i = 0; i<10; i++){
+        readPGMFile(locateFile(to_string(i%10) + ".pgm", dirs), inputVec, INPUT_H, INPUT_W);
         sample.launchInference(inputVec);
-        //sample.getOutput(outputVec);
     }
-    //if(sample.getOutput(outputVec)){
-
+    //if(){
+    
     //}
-
-    sample.teardown();
+    
+    //sample.teardown();
     return 0;
 }
 /*
