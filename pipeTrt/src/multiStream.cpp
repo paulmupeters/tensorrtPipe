@@ -1,32 +1,26 @@
-//! \file sampleMNIST.cpp
-//! \brief This file contains the implementation of the MNIST sample.
-//!
-//! It builds a TensorRT engine by importing a trained MNIST Caffe model. It uses the engine to run
-//! inference on an input image of a digit.
-//! It can be run with the following command line:
-//! Command: ./sample_mnist [-h or --help] [-d=/path/to/data/dir or --datadir=/path/to/data/dir]
+//! \file multiStream.cpp
+//! 
+//! \brief source file of multiStream.h
 #include "multiStream.h"
-//#include <queue>
 #include <memory> 
 #include "NvCaffeParser.h"
 #include <cuda_runtime_api.h>
 #include <algorithm>
 #include <cassert>
-//#include <cmath>
-//#include <fstream>
+#include <string>
 #include <iostream>
-//#include <sstream>
-//#include <numeric>
+
  
 
 
 
 
-multiStreamTrt::multiStreamTrt(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder, nvinfer1::IBuilderConfig* config){
+multiStreamTrt::multiStreamTrt(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder, nvinfer1::IBuilderConfig* config,
+     bool multiThread=true, int nNetworks):multiThreading(multiThread), nNetworks(nNetworks){
     mEngine = builder->buildEngineWithConfig(*network,*config);
     inputDims = network-> getInput(0)->getDimensions();
     //outputDims = network-> getOutput(0)->getDimensions();
-    splitNetwork(network, builder, config);
+    buildEngines(network, builder, config);
 
     std::cout<<"build succes"<<std::endl;
 }
@@ -55,57 +49,65 @@ size_t multiStreamTrt::getWidth(){ return inputDims.d[2];}
 //    return(outputDims.d[0] * outputDims.d[1] * outputDims.d[2]);
 //}
 
-// splits the network in different cuda engines
-void multiStreamTrt::splitNetwork(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder,nvinfer1::IBuilderConfig* config){
-    std::cout<<"splitting into: "<< nNetworks << " networks"<<std::endl;
-    
-    std::vector<nvinfer1::INetworkDefinition*> splittedNetworks; 
-    for (int i=0; i<nNetworks; i++)
-       splittedNetworks.push_back(builder->createNetwork());     
-    const int nbLayers = network -> getNbLayers();
+
+void multiStreamTrt::split(nvinfer1::INetworkDefinition* network, std::vector<nvinfer1::INetworkDefinition*>& splittedNetworks,
+  std::queue<int>& splittingPoints){
     int index = 0;
-    int splitsNeeded = nNetworks;
-    const int split = nbLayers/nNetworks;
     nvinfer1::ILayer* curLayer;
     nvinfer1::ILayer* newLayer;
-
-    
-    for (int i =  0; i <nbLayers; i++ ){
-        curLayer = network -> getLayer(i);
-        if (i % split == 0 && splitsNeeded > 0){
-            nvinfer1::ITensor* data = splittedNetworks.back() -> addInput( curLayer -> getInput(0)->getName() , curLayer -> getInput(0)->getType(), 
+    int nbLayers = network -> getNbLayers();
+    for(int i =0; i <nbLayers; i++){
+        curLayer = network ->getLayer(i);
+        if (i == splittingPoints.front()){
+            nvinfer1::ITensor* data = splittedNetworks[index] -> addInput( curLayer -> getInput(0)->getName() , curLayer -> getInput(0)->getType(), 
                 curLayer -> getInput(0)->getDimensions());
             assert(data && "input tensor not found\n");
-            newLayer = addLayerToNetwork(splittedNetworks.back(), curLayer, data);
-            splitsNeeded -=1;
+            newLayer = addLayerToNetwork(splittedNetworks[index], curLayer, data);
+            splittingPoints.pop();
         }
-        else if ((i % split == split-1 && splitsNeeded > 0 )|| i == nbLayers-1){
-            newLayer = addLayerToNetwork(splittedNetworks.back(), curLayer, curLayer -> getInput(0));
-            splittedNetworks.back()->markOutput(*newLayer -> getOutput(0));
-        
-            nvinfer1::ICudaEngine* newEngine = builder->buildEngineWithConfig(*splittedNetworks.back(),*config); 
-            assert(nullptr!=newEngine && "New engine points to null");
-            
-            auto newPipe = std::make_shared<Pipe>(index == nNetworks-1, newEngine);
-            if (index > 0)
-                mPipes.back()->setNextPipe(newPipe);
-            
-            mPipes.push_back(newPipe);
-            std::cout<<"Network added succesfully"<<std::endl;
-
+        else{
+            newLayer = addLayerToNetwork(splittedNetworks[index], curLayer, curLayer -> getInput(0));
+        }
+        if (i == splittingPoints.front() -1 || i == nbLayers-1){
+            splittedNetworks[index]->markOutput(*newLayer -> getOutput(0));
             ++index;
-            splittedNetworks.back()->destroy();
-            splittedNetworks.pop_back();
-        }else{
-            newLayer = addLayerToNetwork(splittedNetworks.back(), curLayer, curLayer -> getInput(0));
-            assert(newLayer && "new layer not added to network\n");
         }
+
     }
 
 }
 
+// splits the network in different cuda engines
+void multiStreamTrt::buildEngines(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder,nvinfer1::IBuilderConfig* config){
+
+    const int nbLayers = network -> getNbLayers();
+    const int splitLength = nbLayers/nNetworks;    
+    std::vector<nvinfer1::INetworkDefinition*> splittedNetworks; 
+    std::string namePipe ="Pipe#";        
+    std::queue<int> splittingPoints;
+
+    for (int i=0; i<nNetworks; i++){
+        splittedNetworks.push_back(builder->createNetwork());
+        int point = i * splitLength;
+        splittingPoints.push(point);
+    }
+    std::cout<<"splitting into: "<< nNetworks << " networks"<<std::endl;
+    split(network, splittedNetworks, splittingPoints);
+    
+    for(int i=0; i<nNetworks; i++){
+            splittedNetworks[i]->setName((namePipe + std::to_string(i+1)).c_str());
+            nvinfer1::ICudaEngine* newEngine = builder->buildEngineWithConfig(*splittedNetworks[i],*config); 
+            assert(nullptr!=newEngine && "New engine points to null");
+            auto newPipe = std::make_shared<Pipe>(i == nNetworks-1, multiThreading, newEngine);
+            if (i > 0)
+                mPipes.back()->setNextPipe(newPipe);
+            
+            mPipes.push_back(newPipe);
+    }
+}
+
 nvinfer1::ILayer* multiStreamTrt::addLayerToNetwork(nvinfer1::INetworkDefinition*& network, nvinfer1::ILayer* layer, nvinfer1::ITensor* input){
-    //nvinfer1::ITensor* input = layer->getInput(0);
+
     switch(layer->getType()){
         case nvinfer1::LayerType::kCONVOLUTION :{
             std::cout<<"Adding convolution layer."<<std::endl;

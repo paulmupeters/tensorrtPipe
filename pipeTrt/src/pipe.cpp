@@ -8,15 +8,14 @@ Pipe::~Pipe(){
     cudaStreamDestroy(mStream);
     CHECK(cudaFree(mBindings[0]));
     CHECK(cudaFree(mBindings[1]));
-    mThread.join();
-    std::cout<<"Thread joined, exiting pipe #"<<std::endl;
+    if (threadingActivated)
+        mThread.join();
+    std::cout<<"Thread joined, exiting pipe "<<pipeName<<std::endl;
+    std::cout<<"Elapsed time: "<<totalTime<<std::endl<<std::endl;;
 }
 
 void Pipe::launchInference(){
-    cudaEvent_t start;
-    cudaEvent_t end;
-    
-    while(!mTerminate || !inputQueue.empty()){
+    do{
         if(!inputQueue.empty()){
             std::vector<float> const inputTensor = inputQueue.front();
             std::vector<float> outputTensor(output_size);
@@ -33,29 +32,31 @@ void Pipe::launchInference(){
                             cudaMemcpyDeviceToHost, mStream);
             cudaEventRecord(end, mStream);
             cudaStreamSynchronize(mStream);
-            cudaEventElapsedTime(&elapsedTime, start, end);
+            cudaEventElapsedTime(&elapsedTime, start,end);
             totalTime += elapsedTime;    
 
             if(isLast){
                 Output newOutput(outputTensor);
                 netOutputs.push_back(newOutput);
                 int max_element = arg_max(outputTensor);
-                std::cout << "classified as: "<< max_element<<std::endl;
+                //std::cout << "classified as: "<< max_element<<std::endl;
             }
             else{
                 nextPipe->infer(outputTensor);
             }
         }
-    }
+    }while((!mTerminate || !inputQueue.empty()) && threadingActivated );
     threadRunning = false;
 }
 
 void Pipe::infer(std::vector<float> const inputTensor){
     inputQueue.push(inputTensor);
-    if(!threadRunning){
+    if(!threadRunning && threadingActivated){
         mThread = std::thread(&Pipe::launchInference, this);
         threadRunning = true;
     }
+    if(!threadingActivated)
+        launchInference();
 }
 
 

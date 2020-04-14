@@ -1,3 +1,6 @@
+//! \file multiStream.h
+//! 
+//! \brief Class for splitting a tensorrt network in multiple tensorrt engines.
 #ifndef HPIPE_INCLUDED
 #define HPIPE_INCLUDED
 #include <string>
@@ -5,7 +8,7 @@
 #include "Utils.h"
 #include "pipe.h"
 #include <vector>
-//#include <thread>
+#include <queue>
 
 
 
@@ -13,7 +16,7 @@
 class multiStreamTrt{
     //TO-DO: Replace pointers with smart pointers ********
     public:
-        multiStreamTrt(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder, nvinfer1::IBuilderConfig* config);
+        multiStreamTrt(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder, nvinfer1::IBuilderConfig* config, bool multiThread, int nNetworks=2);
         ~multiStreamTrt();
         bool build();
         void launchInference(std::vector<float>);
@@ -28,8 +31,9 @@ class multiStreamTrt{
         bool teardown();
 
     private:
+        bool multiThreading;
         int batchSize=1; 
-        int nNetworks = 2;
+        int nNetworks;
         const int inputIndex = 0;
         const int outputIndex =1;
         
@@ -37,8 +41,8 @@ class multiStreamTrt{
         int outputDims[3];
 
         nvinfer1::ICudaEngine* mEngine;
-
-        void splitNetwork(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder,nvinfer1::IBuilderConfig* config);
+        void split(nvinfer1::INetworkDefinition*, std::vector<nvinfer1::INetworkDefinition*>&, std::queue<int>&);
+        void buildEngines(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder,nvinfer1::IBuilderConfig* config);
         nvinfer1::ILayer* addLayerToNetwork(nvinfer1::INetworkDefinition*& network, nvinfer1::ILayer* layer,nvinfer1::ITensor* input);
         
         //unsigned int nThreads = std::thread::hardware_concurrency();

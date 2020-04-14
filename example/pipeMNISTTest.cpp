@@ -34,7 +34,8 @@ int main(int argc, char** argv)
     cout<<"parsed succes"<<endl;
 
     
-    multiStreamTrt sample(network, builder, config);
+    //multiStreamTrt sample(network, builder, config, false, 2);
+    multiStreamTrt sample(network, builder, config, false, network->getNbLayers());
 
 
     // Prepare input
@@ -54,7 +55,7 @@ int main(int argc, char** argv)
     readPGMFile(locateFile(number + ".pgm", dirs), inputVec, INPUT_H, INPUT_W);
 
 
-    for (int i = 0; i<10; i++){
+    for (int i = 0; i<100; i++){
         readPGMFile(locateFile(to_string(i%10) + ".pgm", dirs), inputVec, INPUT_H, INPUT_W);
         sample.launchInference(inputVec);
     }
