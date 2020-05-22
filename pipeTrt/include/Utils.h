@@ -48,7 +48,7 @@ class Logger : public nvinfer1::ILogger
 template<typename T>
 class MaxQueue : public std::queue<T>
 {
-    int _maxSize;
+    size_t _maxSize;
 public:
     void setMaxSize(int maxSize) {_maxSize = maxSize;}
     void push(const T& element)

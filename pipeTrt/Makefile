@@ -152,6 +152,33 @@ src/multiStream.cpp.s:
 	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/multiStream.cpp.s
 .PHONY : src/multiStream.cpp.s
 
+src/parsePrototxt.o: src/parsePrototxt.cpp.o
+
+.PHONY : src/parsePrototxt.o
+
+# target to build an object file
+src/parsePrototxt.cpp.o:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/parsePrototxt.cpp.o
+.PHONY : src/parsePrototxt.cpp.o
+
+src/parsePrototxt.i: src/parsePrototxt.cpp.i
+
+.PHONY : src/parsePrototxt.i
+
+# target to preprocess a source file
+src/parsePrototxt.cpp.i:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/parsePrototxt.cpp.i
+.PHONY : src/parsePrototxt.cpp.i
+
+src/parsePrototxt.s: src/parsePrototxt.cpp.s
+
+.PHONY : src/parsePrototxt.s
+
+# target to generate assembly for a file
+src/parsePrototxt.cpp.s:
+	cd /home/nvidia/PaulPeters/tensorrtPipe && $(MAKE) -f pipeTrt/CMakeFiles/pipeTrt.dir/build.make pipeTrt/CMakeFiles/pipeTrt.dir/src/parsePrototxt.cpp.s
+.PHONY : src/parsePrototxt.cpp.s
+
 src/pipe.o: src/pipe.cpp.o
 
 .PHONY : src/pipe.o
@@ -191,6 +218,9 @@ help:
 	@echo "... src/multiStream.o"
 	@echo "... src/multiStream.i"
 	@echo "... src/multiStream.s"
+	@echo "... src/parsePrototxt.o"
+	@echo "... src/parsePrototxt.i"
+	@echo "... src/parsePrototxt.s"
 	@echo "... src/pipe.o"
 	@echo "... src/pipe.i"
 	@echo "... src/pipe.s"

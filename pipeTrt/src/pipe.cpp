@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <numeric>
 
-
+/*
 
 Pipe::~Pipe(){
     cudaStreamDestroy(mStream);
@@ -38,7 +38,7 @@ void Pipe::launchInference(){
             if(isLast){
                 Output newOutput(outputTensor);
                 netOutputs.push_back(newOutput);
-                int max_element = arg_max(outputTensor);
+                //int max_element = arg_max(outputTensor);
                 //std::cout << "classified as: "<< max_element<<std::endl;
             }
             else{
@@ -59,6 +59,35 @@ void Pipe::infer(std::vector<float> const inputTensor){
         launchInference();
 }
 
+
+void Pipe::inferCPU(std::vector<float> const inputTensor){
+    // Find the binding points for the input and output nodes
+    armnnCaffeParser::BindingPointInfo inputBindingInfo = parser->GetNetworkInputBindingInfo("data");
+    armnnCaffeParser::BindingPointInfo outputBindingInfo = parser->GetNetworkOutputBindingInfo("prob");
+
+
+
+    // Optimize the network for a specific runtime compute device, e.g. CpuAcc, GpuAcc
+    //armnn::IRuntimePtr runtime = armnn::IRuntime::Create(armnn::Compute::CpuAcc);
+    armnn::IRuntime::CreationOptions options;
+    armnn::IRuntimePtr runtime = armnn::IRuntime::Create(options);
+    armnn::IOptimizedNetworkPtr optNet = armnn::Optimize(*network, {armnn::Compute::CpuRef}, runtime->GetDeviceSpec());
+
+     // Load the optimized network onto the runtime device
+    armnn::NetworkId networkIdentifier;
+    runtime->LoadNetwork(networkIdentifier, std::move(optNet));
+
+    // Run a single inference on the test image
+    std::array<float, 10> output;
+    armnn::Status ret = runtime->EnqueueWorkload(networkIdentifier,
+                                                 MakeInputTensors(inputBindingInfo, &input->image[0]),
+                                                 MakeOutputTensors(outputBindingInfo, &output[0]));
+
+    // Convert 1-hot output to an integer label and print
+    int label = std::distance(output.begin(), std::max_element(output.begin(), output.end()));
+    std::cout << "Predicted: " << label << std::endl;
+    std::cout << "   Actual: " << input->label << std::endl;
+}
 
 void Pipe::setNextPipe(std::shared_ptr<Pipe> next){
     nextPipe = next; 
@@ -87,7 +116,6 @@ bool Pipe::terminate(){
     return true;
 }
 
-    
 
 void Pipe::allocateGpu(nvinfer1::ICudaEngine* engine){
         for (int i = 0; i < engine->getNbBindings(); ++i){
@@ -102,3 +130,5 @@ void Pipe::allocateGpu(nvinfer1::ICudaEngine* engine){
             output_size = size;
     }
 }
+
+*/

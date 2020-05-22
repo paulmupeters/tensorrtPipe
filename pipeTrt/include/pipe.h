@@ -23,10 +23,9 @@ return static_cast<int>(std::distance(vec.begin(), max_element(vec.begin(), vec.
 
 class Pipe{
     public:
-        Pipe(bool lastI, bool threading, nvinfer1::ICudaEngine* engineI): isLast(lastI), threadingActivated(threading){
+        Pipe(nvinfer1::ICudaEngine* engineI, bool lastI, bool threading): 
+          isLast(lastI), threadingActivated(threading){
             allocateGpu(engineI);
-            inputQueue.setMaxSize(20);
-            pipeName = engineI->getName();
             // Create execution context and cuda streams
             // Use CUDA streams to manage the concurrency of copying and executing
             //assert(engineI-> getNbBindings() == 2 && "Number of bindings is not 2");
@@ -34,6 +33,9 @@ class Pipe{
             CHECK(cudaStreamCreate(&mStream));
             cudaEventCreate(&start);
             cudaEventCreate(&end);
+
+            inputQueue.setMaxSize(20);
+            //pipeName = engineI->getName();
             
         };    
         ~Pipe();
@@ -56,7 +58,6 @@ class Pipe{
         cudaEvent_t end;
 
         nvinfer1::IExecutionContext* executionContext;
-        
         void allocateGpu(nvinfer1::ICudaEngine*);
         void launchInference();
         std::shared_ptr<Pipe> nextPipe{nullptr};
@@ -69,3 +70,20 @@ class Pipe{
         double totalTime = 0.0;
 
 };
+/*
+class CpuPipe : public Pipe{
+    GpuPipe( );
+    public:
+};
+
+class GpuPipe : public Pipe{
+
+    public:
+        GpuPipe(){
+
+        };
+
+    private:
+        
+};
+*/

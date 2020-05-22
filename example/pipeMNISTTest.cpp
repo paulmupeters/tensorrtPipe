@@ -4,38 +4,37 @@ Example of how to use pipeTrt, In this example the caffe parser is used to creat
 #include <iostream>
 #include <cassert>
 #include "multiStream.h"
+//#include "cpuEngine.h"
+#include "parsePrototxt.h"
 #include "NvInfer.h"
 #include "NvCaffeParser.h"
-using namespace std;
 
+using namespace std;
 
 
 
 int main(int argc, char** argv)
 {
+
     // Get input arguments
     string number = "5";
     if (argc > 1)
         number = string(argv[1]);
     string dataDir = "example/data/";
 
+    string deploy = dataDir + "lenet_batchsize_1.prototxt";
+    string model = dataDir + "lenet_batchsize_1.caffemodel";
 
-    // create tensorrt network, builder and builder configuration
-    static Logger log(0);
-    nvinfer1::IBuilder* builder = nvinfer1::createInferBuilder(log);
-    nvinfer1::IBuilderConfig* config = builder->createBuilderConfig();
-    config ->setMaxWorkspaceSize(8 << 20);
-    builder->setMaxBatchSize(1);
-    
-    nvinfer1::INetworkDefinition* network = builder->createNetwork();
-    nvcaffeparser1::ICaffeParser* parser = nvcaffeparser1::createCaffeParser();
-    parser->parse((dataDir + "mnist.prototxt").c_str() ,(dataDir + "mnist.caffemodel").c_str(), *network, nvinfer1::DataType::kFLOAT);
-    assert(network->getNbLayers() > 0  && "Network was not parsed correctly");
-    cout<<"parsed succes"<<endl;
+    std::vector<std::string> dirs{"example/data/", "data/", "../example/data/"};
+    std::vector<float> input;
+    readPGMFile(locateFile(number + ".pgm", dirs), input, 28, 28);
 
-    
-    //multiStreamTrt sample(network, builder, config, false, 2);
-    multiStreamTrt sample(network, builder, config, false, network->getNbLayers());
+   proto_parse::CaffeParser(deploy, model);
+
+    //multiStreamTrt sample(deploy, model, false, 2);
+
+/*    //multiStreamTrt sample(network, builder, config, false, 2);
+    multiStreamTrt sample(deploy, model, false, network->getNbLayers());
 
 
     // Prepare input
@@ -44,9 +43,6 @@ int main(int argc, char** argv)
     const size_t INPUT_W = network->getInput(0)->getDimensions().d[2];
     //const size_t output_size = network->getInput(0)->getDimensions().d; 
 
-    builder -> destroy();
-    config -> destroy();
-    network -> destroy();
 
     //read pgm files and fill input tensor
     std::vector<std::string> dirs{"example/data/", "data/", "../example/data/"};
@@ -64,7 +60,9 @@ int main(int argc, char** argv)
     //}
     
     //sample.teardown();
+    */
     return 0;
+    
 }
 /*
     bool argsOK = samplesCommon::parseArgs(args, argc, argv);

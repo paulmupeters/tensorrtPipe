@@ -10,35 +10,33 @@
 #include <string>
 #include <iostream>
 
- 
 
 
 
-
-multiStreamTrt::multiStreamTrt(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder, nvinfer1::IBuilderConfig* config,
-     bool multiThread=true, int nNetworks):multiThreading(multiThread), nNetworks(nNetworks){
-    mEngine = builder->buildEngineWithConfig(*network,*config);
-    inputDims = network-> getInput(0)->getDimensions();
-    //outputDims = network-> getOutput(0)->getDimensions();
-    buildEngines(network, builder, config);
-
+multiStreamTrt::multiStreamTrt(std::string deploy, std::string model, bool multiThread=true, 
+  int nNetworks):multiThreading(multiThread), nNetworks(nNetworks){
+    loadNetwork(deploy, model);
+    //buildEnginesCPU(input);
+    onlyCpu = true;
     std::cout<<"build succes"<<std::endl;
 }
 
 multiStreamTrt::~multiStreamTrt(){
-    teardown();
+    if(!onlyCpu)
+        teardown();
 }
 
 
 void multiStreamTrt::launchInference(std::vector<float> input){
-    mPipes[0]->infer(input);
+    //mPipes[0]->infer(input);
+    std::cout<<"launched"<<std::endl;
 }
 
 bool multiStreamTrt::getOutput(std::vector<float>& output){
-    if(!mPipes[nNetworks-1]->getOutput(output))
-        return false;
-    int max_element = arg_max(output);
-    std::cout << "classified as: "<< max_element<<std::endl;
+    //if(!mPipes[nNetworks-1]->getOutput(output))
+    //    return false;
+    //int max_element = arg_max(output);
+    //std::cout << "classified as: "<< max_element<<std::endl;
     return true;
 }
 
@@ -46,7 +44,7 @@ size_t multiStreamTrt::getNChannels(){return inputDims.d[0];}
 size_t multiStreamTrt::getHeight(){return inputDims.d[1];}
 size_t multiStreamTrt::getWidth(){ return inputDims.d[2];}
 //size_t multiStreamTrt::getOutputSize(){
-//    return(outputDims.d[0] * outputDims.d[1] * outputDims.d[2]);
+//    return(outputDims[0] * outputDims[1] * outputDims[2]);
 //}
 
 
@@ -58,6 +56,14 @@ void multiStreamTrt::split(nvinfer1::INetworkDefinition* network, std::vector<nv
     int nbLayers = network -> getNbLayers();
     for(int i =0; i <nbLayers; i++){
         curLayer = network ->getLayer(i);
+        {
+
+            std::string inputTensorName(curLayer->getInput(0)->getName());
+            std::string layerName(curLayer->getName());
+
+            std::cout<<"tensorname: "<<inputTensorName<<std::endl;
+            std::cout<<"Layername: "<<layerName<<std::endl;
+        }
         if (i == splittingPoints.front()){
             nvinfer1::ITensor* data = splittedNetworks[index] -> addInput( curLayer -> getInput(0)->getName() , curLayer -> getInput(0)->getType(), 
                 curLayer -> getInput(0)->getDimensions());
@@ -77,9 +83,37 @@ void multiStreamTrt::split(nvinfer1::INetworkDefinition* network, std::vector<nv
 
 }
 
-// splits the network in different cuda engines
-void multiStreamTrt::buildEngines(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder,nvinfer1::IBuilderConfig* config){
 
+void multiStreamTrt::loadNetwork(std::string deploy, std::string model){
+
+    // create tensorrt network, builder and builder configuration
+    static Logger log(0);
+    nvinfer1::IBuilder* builder = nvinfer1::createInferBuilder(log);
+    nvinfer1::IBuilderConfig* config = builder->createBuilderConfig();
+    config ->setMaxWorkspaceSize(8 << 20);
+    builder->setMaxBatchSize(1);
+
+    nvinfer1::INetworkDefinition* network = builder->createNetworkV2(0U);
+    nvcaffeparser1::ICaffeParser* parser = nvcaffeparser1::createCaffeParser();
+    parser->parse(deploy.c_str() ,model.c_str(), *network, nvinfer1::DataType::kFLOAT);
+    assert(network->getNbLayers() > 0  && "Network was not parsed correctly");
+    std::cout<<"Trt parsed succes"<<std::endl;
+
+    mEngine = builder->buildEngineWithConfig(*network,*config);
+    inputDims = network-> getInput(0)->getDimensions();
+    //outputDims = network-> getOutput(0)->getDimensions();
+    buildEnginesGPU(network, builder, config);
+    builder -> destroy();
+    config -> destroy();
+    network -> destroy();
+}
+
+int multiStreamTrt::buildEnginesCPU(std::vector<float> input){
+    
+}
+
+// splits the network in different cuda engines
+void multiStreamTrt::buildEnginesGPU(nvinfer1::INetworkDefinition* network, nvinfer1::IBuilder* builder,nvinfer1::IBuilderConfig* config){
     const int nbLayers = network -> getNbLayers();
     const int splitLength = nbLayers/nNetworks;    
     std::vector<nvinfer1::INetworkDefinition*> splittedNetworks; 
@@ -87,7 +121,7 @@ void multiStreamTrt::buildEngines(nvinfer1::INetworkDefinition* network, nvinfer
     std::queue<int> splittingPoints;
 
     for (int i=0; i<nNetworks; i++){
-        splittedNetworks.push_back(builder->createNetwork());
+        splittedNetworks.push_back(builder->createNetworkV2(0U));
         int point = i * splitLength;
         splittingPoints.push(point);
     }
@@ -98,11 +132,11 @@ void multiStreamTrt::buildEngines(nvinfer1::INetworkDefinition* network, nvinfer
             splittedNetworks[i]->setName((namePipe + std::to_string(i+1)).c_str());
             nvinfer1::ICudaEngine* newEngine = builder->buildEngineWithConfig(*splittedNetworks[i],*config); 
             assert(nullptr!=newEngine && "New engine points to null");
-            auto newPipe = std::make_shared<Pipe>(i == nNetworks-1, multiThreading, newEngine);
-            if (i > 0)
-                mPipes.back()->setNextPipe(newPipe);
+            //auto newPipe = std::make_shared<Pipe>(i == nNetworks-1, multiThreading, newEngine);
+            //if (i > 0)
+            //    mPipes.back()->setNextPipe(newPipe);
             
-            mPipes.push_back(newPipe);
+            //mPipes.push_back(newPipe);
     }
 }
 
@@ -169,8 +203,9 @@ nvinfer1::ILayer* multiStreamTrt::addLayerToNetwork(nvinfer1::INetworkDefinition
 }
 
 
+
 bool multiStreamTrt::teardown(){
-    mPipes[0]-> terminate();
+    //mPipes[0]-> terminate();
     return true;
 }
 
@@ -195,6 +230,4 @@ bool multiStreamTrt::seriealizeEngines(){
 bool multiStreamTrt::getSerializedEngines(string fileName){
     return true;
 }
-
-
 */
