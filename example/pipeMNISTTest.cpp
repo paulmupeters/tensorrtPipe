@@ -4,7 +4,7 @@ Example of how to use pipeTrt, In this example the caffe parser is used to creat
 #include <iostream>
 #include <cassert>
 #include "multiStream.h"
-//#include "cpuEngine.h"
+#include "cpuEngine.h"
 #include "parsePrototxt.h"
 #include "NvInfer.h"
 #include "NvCaffeParser.h"
@@ -29,8 +29,11 @@ int main(int argc, char** argv)
     std::vector<float> input;
     readPGMFile(locateFile(number + ".pgm", dirs), input, 28, 28);
 
-   proto_parse::CaffeParser(deploy, model);
+    proto_parse::CaffeParser parsed(deploy, model);
+    cpuEngine engine(parsed.layersList,0,"test");
+    engine.runInference(input);
 
+    //engine.add
     //multiStreamTrt sample(deploy, model, false, 2);
 
 /*    //multiStreamTrt sample(network, builder, config, false, 2);

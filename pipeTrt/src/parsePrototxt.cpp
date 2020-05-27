@@ -9,15 +9,22 @@ namespace proto_parse{
         // Instantiate the caffe net.
         caffe::Net<float> caffe_net(deploy, caffe::TEST);
         assert(getParameters(caffe_net, model));
-        assert(getOutShapes(caffe_net.output_blobs()));
+        assert(getOutShapes(caffe_net.top_vecs()));
+        nOutputs = caffe_net.num_outputs();
     }
 
-    bool CaffeParser::getOutShapes(const std::vector<caffe::Blob<float>*>& outBlobs){
-        if(outBlobs.size() != layersList.size())
+    bool CaffeParser::getOutShapes(const std::vector<std::vector<caffe::Blob<float>*>>& topBlobsLayers){
+        if(topBlobsLayers.size() != layersList.size()){
+            std::cout<<"Number of parsed layers does not match " <<std::endl;
             return false;
+        }
         int i=0;
         for(const auto& layer : layersList){
-            layer -> outputShape = outBlobs[i] -> shape();
+            if(topBlobsLayers[i].size() > 1){
+                std::cout<<"No support for multiple outputs"<<std::endl;
+                return false;
+            }
+            layer -> outputShape = topBlobsLayers[i].front()-> shape();
             ++i;
         }
         return true;
@@ -69,7 +76,7 @@ namespace proto_parse{
 
         Weights biasWeights;
         Weights kernelWeights;
-        assert(getBlobWeights(kernelWeights, biasWeights, layer, outs), "could not extract convolutional Weights");
+        assert(getBlobWeights(kernelWeights, biasWeights, layer, outs));
 
         layersList.push_back(new convolutionLayerInfo((int)layersList.size(), param.name(), outs, kernelSize,
           kernelWeights, biasWeights));
@@ -81,18 +88,17 @@ namespace proto_parse{
         layersList.push_back(new poolingLayerInfo(layersList.size(), param.name(),pool_param.kernel_size()));
     }
 
-    void CaffeParser::ParseInnerProductLayer(const caffe::shared_ptr<caffe::Layer<float>> layer){
+    void CaffeParser::ParseFullyConnectedLayer(const caffe::shared_ptr<caffe::Layer<float>> layer){
         const caffe::LayerParameter& param = layer->layer_param();
         const caffe::InnerProductParameter& inner_product_param = param.inner_product_param();
         int outs =inner_product_param.num_output();
 
         Weights biasWeights;
         Weights kernelWeights;
-        assert(getBlobWeights(kernelWeights, biasWeights,layer, outs), "could not extract fully connected Weights");
+        assert(getBlobWeights(kernelWeights, biasWeights,layer, outs));
 
-        layersList.push_back(new innerProductLayerInfo (layersList.size(), param.name(),outs,
+        layersList.push_back(new fullyConnectedLayerInfo (layersList.size(), param.name(),outs,
           kernelWeights, biasWeights));   
-        }
     }
     void CaffeParser::ParseReluLayer(const caffe::shared_ptr<caffe::Layer<float>> layer){
         const caffe::LayerParameter& param = layer->layer_param();
@@ -116,7 +122,7 @@ namespace proto_parse{
     { "Convolution",  &CaffeParser::ParseConvLayer },
     { "Pooling",      &CaffeParser::ParsePoolingLayer },
     { "ReLU",         &CaffeParser::ParseReluLayer },
-    { "InnerProduct", &CaffeParser::ParseInnerProductLayer },
+    { "InnerProduct", &CaffeParser::ParseFullyConnectedLayer },
     { "Softmax",      &CaffeParser::ParseSoftMaxLayer },
     //{ "Concat",       &CaffeParser::ParseConcatLayer },
     //{ "BatchNorm",    &CaffeParser::ParseBatchNormLayer },

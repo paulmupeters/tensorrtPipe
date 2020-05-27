@@ -23,7 +23,13 @@ namespace proto_parse{
         STOCHASTIC = 2
     
     };
-
+    struct Weights{
+            Weights(const float* iValues, int iCount):values(iValues), count(iCount){};
+            Weights(const Weights& w): values(w.values), count(w.count){} ;
+            Weights():values(nullptr){};
+            const float* values;
+            size_t count;
+    };
     class layerInfoBase {
         public:
             layerInfoBase(layerType itype, std::string ilayerName, int iId):type(itype), layerName(ilayerName), id(iId){};
@@ -40,32 +46,20 @@ namespace proto_parse{
             std::list<layerInfoBase*> layersList;
         private:
             bool getParameters(caffe::Net<float>& caffe_net,const std::string& weightsFile);
-            bool getOutShapes(const std::vector<caffe::Blob<float>*>& outBlobs);
+            bool getOutShapes(const std::vector<std::vector<caffe::Blob<float>*>>& outBlobs);
             bool getBlobWeights(Weights& w, Weights& b,const caffe::shared_ptr<caffe::Layer<float>> layer, int numOutputs);
             void ParseConvLayer(const caffe::shared_ptr<caffe::Layer<float>> layer);
             void ParsePoolingLayer(const caffe::shared_ptr<caffe::Layer<float>> layer);
-            void ParseInnerProductLayer(const caffe::shared_ptr<caffe::Layer<float>> layer);
+            void ParseFullyConnectedLayer(const caffe::shared_ptr<caffe::Layer<float>> layer);
             void ParseReluLayer(const caffe::shared_ptr<caffe::Layer<float>> layer);
             void ParseSoftMaxLayer(const caffe::shared_ptr<caffe::Layer<float>> layer);
             void ParseInputLayer(const caffe::shared_ptr<caffe::Layer<float>> layer);
 
             using parsingFunction = void(CaffeParser::*)(const caffe::shared_ptr<caffe::Layer<float>> layer);
             static const std::map<std::string, parsingFunction> layerNameToParsFunc;
-            
+            int nOutputs;            
             
     };
-
-
-    struct Weights{
-            //Weights();
-            Weights(const float* iValues, int iCount):values(iValues), count(iCount){};
-            Weights(const Weights& w): values(w.values), count(w.count){} ;
-            Weights():values(nullptr){};
-            const float* values;
-            int count;
-    };
-
-
     class convolutionLayerInfo :public layerInfoBase{
         public:
             convolutionLayerInfo (int iId, std::string iname, int iFeatureMaps, int iKernelSize, Weights iKernWeights,
@@ -75,6 +69,8 @@ namespace proto_parse{
             int getNbOutputs(){return nbOutputs;};
             int getNbFeatureMaps(){return nbFeatureMaps;};
             int getKernelSize(){return kernelSize;};
+            Weights getKernelWeights(){return kernelWeights;};
+            Weights getBiasWeights(){return biasWeights;};
         private:
             int nbOutputs;
             int nbFeatureMaps;
@@ -94,13 +90,14 @@ namespace proto_parse{
         public:
             inputLayerInfo(int iId, std::string iname, int channels, int h, int w, int n) : 
             layerInfoBase(Input, iname, iId){
-                shape[0] = n;
-                shape[1] = channels;
-                shape[2] = h;
-                shape[3] = w;
+                outputShape.push_back(n);
+                outputShape.push_back(channels);
+                outputShape.push_back(h); 
+                outputShape.push_back(w);
             };
-        private:
-            int shape[4];
+            //std::vector<int> shape;
+        
+            
     };
 
     class softMaxLayerInfo :public layerInfoBase{
@@ -108,14 +105,17 @@ namespace proto_parse{
             softMaxLayerInfo(int iId, std::string iname) :layerInfoBase(SoftMax, iname, iId){};
     };
 
-    class innerProductLayerInfo :public layerInfoBase {
+    class fullyConnectedLayerInfo :public layerInfoBase {
         public:
-            innerProductLayerInfo(int iId, std::string iname, int inOutputs, Weights iKernWeights,
-              Weights iBiasWeights): layerInfoBase(FullyConnected, iname, iId), nbOutputs(inOutputs), 
+            fullyConnectedLayerInfo(int iId, std::string iname, int fm, Weights iKernWeights,
+              Weights iBiasWeights): layerInfoBase(FullyConnected, iname, iId), nbFeatureMaps(fm), 
               kernelWeights(iKernWeights), biasWeights(iBiasWeights){};
-        
+            
+            int getnbFeatureMaps(){return nbFeatureMaps;};
+            Weights getKernelWeights(){return kernelWeights;};
+            Weights getBiasWeights(){return biasWeights;};     
         private:
-            int nbOutputs;
+            int nbFeatureMaps;
             Weights kernelWeights;
             Weights biasWeights;
     };
@@ -124,6 +124,7 @@ namespace proto_parse{
         public:
             poolingLayerInfo(int iId, std::string iname,int kernelSize, PoolMethod method = MAX): layerInfoBase(Pooling, iname, iId),
                 kernelSize(kernelSize), poolingType(method){};
+        int getKernelSize(){return kernelSize;};
         private:
             int kernelSize; // pool over a kernelSize * kernelSize region
             PoolMethod poolingType; // max ave stochastic

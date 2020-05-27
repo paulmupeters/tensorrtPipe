@@ -6,8 +6,8 @@
 
 Pipe::~Pipe(){
     cudaStreamDestroy(mStream);
-    CHECK(cudaFree(mBindings[0]));
-    CHECK(cudaFree(mBindings[1]));
+    CHECKC(cudaFree(mBindings[0]));
+    CHECKC(cudaFree(mBindings[1]));
     if (threadingActivated)
         mThread.join();
     std::cout<<"Thread joined, exiting pipe "<<pipeName<<std::endl;

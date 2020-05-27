@@ -16,11 +16,6 @@ struct Output{
     bool accesed = true;
 };
 
-template <typename T, typename A>
-int arg_max(std::vector<T, A> const& vec) {
-return static_cast<int>(std::distance(vec.begin(), max_element(vec.begin(), vec.end())));
-}
-
 class Pipe{
     public:
         Pipe(nvinfer1::ICudaEngine* engineI, bool lastI, bool threading): 
@@ -30,7 +25,7 @@ class Pipe{
             // Use CUDA streams to manage the concurrency of copying and executing
             //assert(engineI-> getNbBindings() == 2 && "Number of bindings is not 2");
             executionContext = engineI -> createExecutionContext();
-            CHECK(cudaStreamCreate(&mStream));
+            CHECKC(cudaStreamCreate(&mStream));
             cudaEventCreate(&start);
             cudaEventCreate(&end);
 

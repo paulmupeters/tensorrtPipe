@@ -21,11 +21,11 @@
 
 
 /**
- * A one-line description of the class.
+ * Optimized engine class.
  *
- * A paragraph (or more) describing the class. 
- * Markdown can be used to provide nuanced typography.
- * bla bla
+ * Optimizes CNN by dividing workload over the available cpu and gpu. 
+ * Uses threading for when preforming inference
+ * 
  * 
  *
  */

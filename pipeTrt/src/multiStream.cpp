@@ -109,7 +109,7 @@ void multiStreamTrt::loadNetwork(std::string deploy, std::string model){
 }
 
 int multiStreamTrt::buildEnginesCPU(std::vector<float> input){
-    
+    return 1;    
 }
 
 // splits the network in different cuda engines
